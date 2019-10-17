@@ -10,6 +10,10 @@ class StripeSourceResponse extends AbstractResponse
     public $currency;
     public $ownerEmail;
     public $ownerName;
+    public $customer;
+    public $card;
+    public $status;
+    public $amount;
 
     /**
      * @param $response
@@ -21,5 +25,9 @@ class StripeSourceResponse extends AbstractResponse
         $this->currency = $response->currency;
         $this->ownerName = $response->owner->name;
         $this->ownerEmail = $response->owner->email;
+        $this->customer = $response->customer;
+        $this->card = $response->card;
+        $this->status = $response->status;
+        $this->amount = $response->amount;
     }
 }
