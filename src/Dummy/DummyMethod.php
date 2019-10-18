@@ -3,7 +3,7 @@ namespace App\Dummy;
 
 use \Exception;
 
-class DummyMethods
+class DummyMethod
 {
     public static function dummyError()
     {

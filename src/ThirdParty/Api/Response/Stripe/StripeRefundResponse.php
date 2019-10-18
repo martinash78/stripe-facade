@@ -3,9 +3,10 @@ namespace App\ThirdParty\Api\Response\Stripe;
 
 use App\ThirdParty\Api\Response\AbstractResponse;
 
-class StripeChargeResponse extends AbstractResponse
+class StripeRefundResponse extends AbstractResponse
 {
     public $id;
+    public $amount;
     public $status;
 
     /**
@@ -14,6 +15,7 @@ class StripeChargeResponse extends AbstractResponse
     public function mapResponse($response)
     {
         $this->id = $response->id;
+        $this->amount = $response->amount;
         $this->status = $response->status;
     }
 }

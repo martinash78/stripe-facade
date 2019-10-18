@@ -3,6 +3,7 @@ namespace App\Stripe\ApiOperations;
 
 Use App\Facade\StripeSourceFacade;
 use App\ThirdParty\Api\Response\Stripe\StripeChargeResponse;
+use App\ThirdParty\Api\Response\Stripe\StripeRefundResponse;
 use App\ThirdParty\Api\Response\Stripe\StripeSourceResponse;
 
 require '../vendor/autoload.php';
@@ -65,7 +66,10 @@ function printResponse($response)
 <?php
 
 try {
-    $stripeFacade = new StripeSourceFacade(StripeSourceResponse::class);
+    $stripeSourceResponse = new StripeSourceResponse();
+    $stripeChargeResponse = new StripeChargeResponse();
+    $stripeRefundResponse = new StripeRefundResponse();
+    $stripeFacade = new StripeSourceFacade($stripeSourceResponse, $stripeChargeResponse, $stripeRefundResponse);
     $response = $stripeFacade->create($createParams);
 
     /**
@@ -111,15 +115,25 @@ try {
     /**
      * Charge the Source
      */
-    $stripeFacade->setResponse(StripeChargeResponse::class);
     echo '<hr /><h5>Response: Charge the Source ID "' . $sourceId . ' </h5>';
     $response = $stripeFacade->charge($chargeParams);
     echo printResponse($response);
 
     /**
+     * Refund the charge
+     */
+    $chargeId = $response->id;
+    $refundParams = [
+        'charge' => $chargeId,
+        'amount' => $amount
+    ];
+    echo '<hr /><h5>Response: Refund the Charge ID "' . $chargeId . ' </h5>';
+    $response = $stripeFacade->refund($refundParams);
+    echo printResponse($response);
+
+    /**
      * Detach a Source
      */
-    $stripeFacade->setResponse(StripeSourceResponse::class);
     echo '<hr /><h5>Response: Detach Customer ID "' . $customerId . '" to Source ID "' . $sourceId . ' </h5>';
     $response = $stripeFacade->detach($sourceId, $customerId);
     echo printResponse($response);
